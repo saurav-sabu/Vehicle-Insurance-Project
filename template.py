@@ -34,7 +34,7 @@ list_of_files = [
     f"{project_name}/utils/main_utils.py",
     f"{project_name}/data_access/__init__.py",
     f"{project_name}/data_access/proj_data.py",
-    f"{project_name}/experiments/experiment.ipynb",
+    "experiments/experiment.ipynb",
     "app.py",
     "requirements.txt",
     "Dockerfile",

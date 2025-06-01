@@ -18,3 +18,4 @@ python-multipart
 jinja2
 imblearn
 mypy-boto3-s3
+-e .
