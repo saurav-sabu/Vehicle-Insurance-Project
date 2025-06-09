@@ -11,3 +11,8 @@
 # except Exception as e:
 #     logging.error(e)
 #     raise MyException(e,sys)
+
+from src.pipeline.training_pipeline import TrainPipeline
+
+pipeline = TrainPipeline()
+pipeline.run_pipeline()

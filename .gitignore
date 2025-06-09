@@ -195,3 +195,5 @@ cython_debug/
 .cursorindexingignore
 
 data.csv
+artifacts/
+*.pkl
