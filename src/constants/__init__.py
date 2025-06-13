@@ -34,4 +34,12 @@ DATA_VALIDATION_DIR_NAME: str = "data_validation"  # Directory for data validati
 DATA_VALIDATION_REPORT_FILE_NAME:str = "reports.yaml"  # File name for data validation report
 
 # Path to the schema file used for data validation
-SCHEMA_FILE_PATH = os.path.join("config","schema.yaml")
+SCHEMA_FILE_PATH = os.path.join("config","schema.yaml")  # Path to schema file
+
+# Data transformation constants
+DATA_TRANSFORMATION_DIR_NAME: str = "data_transformation"  # Directory for data transformation artifacts
+DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR: str = "transformed"  # Directory for transformed data
+DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR: str = "transformed_object"  # Directory for transformed objects
+
+PREPROCESSING_OBJECT_FILE_NAME = "preprocessing.pkl"  # File name for the preprocessing object (pickle file)
+TARGET_COLUMN = "Response"

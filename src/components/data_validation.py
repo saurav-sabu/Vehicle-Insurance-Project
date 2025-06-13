@@ -144,7 +144,7 @@ class DataValidation:
                 json.dump(validation_report, report_file, indent=4) 
 
             logging.info("Data validation artifact created and saved")
-            return DataValidationArtifact
+            return data_validation_artifact 
         
         except Exception as e:
             raise MyException(e, sys)
