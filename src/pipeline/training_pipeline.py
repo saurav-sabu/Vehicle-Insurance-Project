@@ -5,8 +5,9 @@ from src.logger import logging
 from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
 from src.components.data_transformation import DataTransformation
-from src.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig
-from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact
+from src.components.model_trainer import ModelTrainer
+from src.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
+from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact, ModelTrainerArtifact
 
 class TrainPipeline:
     def __init__(self):
@@ -14,6 +15,7 @@ class TrainPipeline:
         self.data_ingestion_config = DataIngestionConfig()
         self.data_validation_config = DataValidationConfig()
         self.data_transformation_config = DataTransformationConfig()
+        self.model_trainer_config = ModelTrainerConfig()
 
     def start_data_ingestion(self) -> DataIngestionArtifact:
         """
@@ -73,7 +75,7 @@ class TrainPipeline:
             data_transformation = DataTransformation(
                 data_ingestion_artifact=data_ingestion_artifact,
                 data_transformation_config=self.data_transformation_config,
-                data_validation_artifact=data_validation_artifact  # Fixed typo here
+                data_validation_artifact=data_validation_artifact  # Pass validation artifact
             )
             # Start the data transformation process and get the artifact
             data_transformation_artifact = data_transformation.initiate_data_transformation()
@@ -82,6 +84,25 @@ class TrainPipeline:
         except Exception as e:
             # Raise a custom exception if any error occurs
             raise MyException(e, sys)
+        
+
+    def start_model_training(self,data_transformation_artifact:DataTransformationArtifact):
+        """
+        Starts the model training process:
+        - Uses the data transformation artifact
+        - Trains the model and returns the model trainer artifact
+        """
+        try:
+            # Create a ModelTrainer object with the transformation artifact and config
+            model_trainer = ModelTrainer(data_transformation_artifact=data_transformation_artifact,
+                                         model_trainer_config=self.model_trainer_config)
+            # Start the model training process and get the artifact
+            model_trainer_artifact = model_trainer.initiate_model_trainer()
+            return model_trainer_artifact
+        
+        except Exception as e:
+            # Raise a custom exception if any error occurs
+            raise MyException(e,sys)
 
 
     def run_pipeline(self):
@@ -89,6 +110,8 @@ class TrainPipeline:
         Runs the complete training pipeline:
         - Starts data ingestion
         - Starts data validation
+        - Starts data transformation
+        - Starts model training
         - Handles exceptions using custom exception class
         """
         try:
@@ -98,11 +121,13 @@ class TrainPipeline:
             data_validation_artifact = self.start_data_validation(
                 data_ingestion_artifact=data_ingestion_artifact
             )
-            # Optionally, you can add data transformation and further steps here
+            # Start the data transformation process
             data_transformation_artifact = self.start_data_transformation(
                 data_ingestion_artifact=data_ingestion_artifact,
                 data_validation_artifact=data_validation_artifact
             )
+            # Start the model training process
+            model_trainer_artifact = self.start_model_training(data_transformation_artifact=data_transformation_artifact)
         except Exception as e:
             # Raise a custom exception if any error occurs during pipeline run
             raise MyException(e, sys)

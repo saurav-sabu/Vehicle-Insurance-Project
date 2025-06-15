@@ -19,3 +19,16 @@ class DataTransformationArtifact:
     transformed_object_file_path: str      # Path to the serialized transformation object (e.g., scaler, encoder)
     transformed_train_file_path: str       # Path to the transformed training dataset
     transformed_test_file_path: str        # Path to the transformed test dataset
+
+# Data class to store classification metrics
+@dataclass
+class ClassificationMetricArtifact:
+    f1_score : float                      # F1 score of the model
+    precision_score: float                # Precision score of the model
+    recall_score: float                   # Recall score of the model
+
+# Data class to store model trainer artifacts, including metrics
+@dataclass
+class ModelTrainerArtifact:
+    trained_model_file_path: str          # Path to the trained model file
+    metric_artifact: ClassificationMetricArtifact  # Classification metrics for the trained model

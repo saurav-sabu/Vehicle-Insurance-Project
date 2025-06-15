@@ -62,3 +62,26 @@ class DataTransformationConfig:
         DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR,
         PREPROCESSING_OBJECT_FILE_NAME
     )
+
+@dataclass
+class ModelTrainerConfig:
+    # Directory for model trainer artifacts
+    model_trainer_dir: str = os.path.join(training_pipeline_config.artifact_dir, MODEL_TRAINER_DIR_NAME)
+    # Path to the trained model file
+    trained_model_file_path: str = os.path.join(model_trainer_dir, MODEL_TRAINER_TRAINED_MODEL_DIR,MODEL_TRAINER_TRAINED_MODEL_NAME)
+    # Expected accuracy for the model
+    expected_accuracy: float = MODEL_TRAINER_EXPECTED_SCORE 
+    # Path to the model config file
+    model_config_file_path = MODEL_TRAINER_MODEL_CONFIG_FILE_PATH
+    # Number of estimators for the model
+    _n_estimators = MODEL_TRAINER_N_ESTIMATORS
+    # Minimum samples required to split an internal node
+    _min_samples_split = MODEL_TRAINER_MIN_SAMPLES_SPLIT
+    # Minimum samples required to be at a leaf node
+    _min_samples_leaf = MODEL_TRAINER_MIN_SAMPLES_LEAF
+    # Maximum depth of the tree
+    _max_depth = MIN_SAMPLES_SPLIT_MAX_DEPTH
+    # Criterion for splitting
+    _criterion = MIN_SAMPLES_SPLIT_CRITERION
+    # Random state for reproducibility
+    _random_state = MIN_SAMPLES_SPLIT_RANDOM_STATE

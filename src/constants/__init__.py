@@ -41,5 +41,19 @@ DATA_TRANSFORMATION_DIR_NAME: str = "data_transformation"  # Directory for data 
 DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR: str = "transformed"  # Directory for transformed data
 DATA_TRANSFORMATION_TRANSFORMED_OBJECT_DIR: str = "transformed_object"  # Directory for transformed objects
 
+# Model trainer constants
+MODEL_TRAINER_DIR_NAME: str = "model_trainer"  # Directory for model trainer artifacts
+MODEL_TRAINER_TRAINED_MODEL_DIR: str = "trained_model"  # Directory for trained models
+MODEL_TRAINER_TRAINED_MODEL_NAME: str = "model.pkl"  # File name for the trained model
+MODEL_TRAINER_EXPECTED_SCORE: float = 0.6  # Expected minimum model score
+MODEL_TRAINER_MODEL_CONFIG_FILE_PATH: str = os.path.join("config","model.yaml")  # Path to model config file
+MODEL_TRAINER_N_ESTIMATORS: int = 200  # Number of estimators for model training
+MODEL_TRAINER_MIN_SAMPLES_SPLIT: int = 7  # Minimum samples required to split an internal node
+MODEL_TRAINER_MIN_SAMPLES_LEAF: int = 6  # Minimum samples required to be at a leaf node
+MIN_SAMPLES_SPLIT_MAX_DEPTH: int = 10  # Maximum depth of the tree
+MIN_SAMPLES_SPLIT_CRITERION: str = "entropy"  # Criterion for splitting
+MIN_SAMPLES_SPLIT_RANDOM_STATE: int = 101  # Random state for reproducibility
+
+# Preprocessing and target column constants
 PREPROCESSING_OBJECT_FILE_NAME = "preprocessing.pkl"  # File name for the preprocessing object (pickle file)
-TARGET_COLUMN = "Response"
+TARGET_COLUMN = "Response"  # Name of the target column
