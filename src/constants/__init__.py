@@ -5,8 +5,10 @@ from dotenv import load_dotenv
 # Load environment variables from a .env file
 load_dotenv()
 
-# Get MongoDB connection URL from environment variable
-MONGO_DB_URL = os.getenv("MONGO_DB_URL")
+# Get MongoDB connection URL and AWS credentials from environment variables
+MONGO_DB_URL = os.getenv("MONGO_DB_URL")  # MongoDB connection URL from environment
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")  # AWS access key ID from environment
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")  # AWS secret access key from environment
 
 # Database and collection configuration
 DATABASE_NAME = "vehicle-db"  # Name of the MongoDB database
@@ -57,3 +59,14 @@ MIN_SAMPLES_SPLIT_RANDOM_STATE: int = 101  # Random state for reproducibility
 # Preprocessing and target column constants
 PREPROCESSING_OBJECT_FILE_NAME = "preprocessing.pkl"  # File name for the preprocessing object (pickle file)
 TARGET_COLUMN = "Response"  # Name of the target column
+
+# AWS credentials and region configuration
+AWS_ACCESS_KEY_ID_ENV_KEY = AWS_ACCESS_KEY_ID  # AWS access key ID
+AWS_SECRET_ACCESS_KEY_ENV_KEY = AWS_SECRET_ACCESS_KEY  # AWS secret access key
+REGION_NAME = "us-east-1"  # AWS region name
+
+# Model evaluation and S3 bucket configuration
+MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE : float = 0.02  # Threshold for model evaluation score change
+MODEL_BUCKET_NAME = "vehicle-model-bucket-1"  # S3 bucket name for model storage
+MODEL_PUSHER_S3_KEY = "model-registry"  # S3 key for model registry
+MODEL_FILE_NAME = "model.pkl"  # Model file name for S3 upload

@@ -11,7 +11,7 @@ class DataIngestionArtifact:
 class DataValidationArtifact:
     validation_status: bool                # Indicates if validation passed or failed
     message: str                           # Message or summary about the validation
-    validation_report_file_path: str        # Path to the validation report file
+    validation_report_file_path: str       # Path to the validation report file
 
 # Data class to store file paths for data transformation artifacts
 @dataclass
@@ -32,3 +32,17 @@ class ClassificationMetricArtifact:
 class ModelTrainerArtifact:
     trained_model_file_path: str          # Path to the trained model file
     metric_artifact: ClassificationMetricArtifact  # Classification metrics for the trained model
+
+# Data class to store model evaluation results
+@dataclass
+class ModelEvaluationArtifact:
+    is_model_accepted: bool               # Indicates if the model is accepted after evaluation
+    changed_accuracy: float               # Change in accuracy compared to previous model
+    s3_model_path: str                    # S3 path where the evaluated model is stored
+    trained_model_path: str               # Local path to the trained model
+
+# Data class to store model pusher artifacts
+@dataclass
+class ModelPusherArtifact:
+    bucket_name: str                      # Name of the S3 bucket where the model is pushed
+    s3_model_path: str                    # S3 path where the model is pushed

@@ -6,8 +6,10 @@ from src.components.data_ingestion import DataIngestion
 from src.components.data_validation import DataValidation
 from src.components.data_transformation import DataTransformation
 from src.components.model_trainer import ModelTrainer
-from src.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig
-from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact, ModelTrainerArtifact
+from src.components.model_evaluation import ModelEvaluation
+from src.components.model_pusher import ModelPusher
+from src.entity.config_entity import DataIngestionConfig, DataValidationConfig, DataTransformationConfig, ModelTrainerConfig, ModelEvaluationConfig,ModelPusherConfig
+from src.entity.artifact_entity import DataIngestionArtifact, DataValidationArtifact, DataTransformationArtifact, ModelTrainerArtifact, ModelPusherArtifact,ModelEvaluationArtifact
 
 class TrainPipeline:
     def __init__(self):
@@ -16,6 +18,8 @@ class TrainPipeline:
         self.data_validation_config = DataValidationConfig()
         self.data_transformation_config = DataTransformationConfig()
         self.model_trainer_config = ModelTrainerConfig()
+        self.model_eval_config = ModelEvaluationConfig()
+        self.model_pusher_config = ModelPusherConfig()
 
     def start_data_ingestion(self) -> DataIngestionArtifact:
         """
@@ -103,6 +107,44 @@ class TrainPipeline:
         except Exception as e:
             # Raise a custom exception if any error occurs
             raise MyException(e,sys)
+        
+    def start_model_evaluation(self,data_transformation_artifact:DataTransformationArtifact,model_trainer_artifact:ModelTrainerArtifact):
+        """
+        Starts the model evaluation process:
+        - Uses the transformation and trainer artifacts
+        - Evaluates the trained model and returns the evaluation artifact
+        """
+        try:
+            # Create a ModelEvaluation object with the required configs and artifacts
+            model_evaluation = ModelEvaluation(model_eval_config=self.model_eval_config,
+                                               data_transformation_artifact=data_transformation_artifact,
+                                               model_trainer_artifact=model_trainer_artifact)
+            # Start the model evaluation process and get the artifact
+            model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
+            return model_evaluation_artifact
+        
+        except Exception as e:
+            # Raise a custom exception if any error occurs
+            raise MyException(e,sys)
+        
+    def start_model_pusher(self,model_evaluation_artifact:ModelEvaluationArtifact):
+        """
+        Starts the model pusher process:
+        - Uses the model evaluation artifact
+        - Pushes the accepted model to deployment/storage
+        - Returns the model pusher artifact
+        """
+        try:
+            # Create a ModelPusher object with the evaluation artifact and config
+            model_pusher = ModelPusher(model_evaluation_artifact=model_evaluation_artifact,
+                                       model_pusher_config=self.model_pusher_config)
+            # Start the model pusher process and get the artifact
+            model_pusher_artifact = model_pusher.initiate_model_pusher()
+            return model_pusher_artifact
+        
+        except Exception as e:
+            # Raise a custom exception if any error occurs
+            raise MyException(e,sys)
 
 
     def run_pipeline(self):
@@ -112,6 +154,7 @@ class TrainPipeline:
         - Starts data validation
         - Starts data transformation
         - Starts model training
+        - Starts model evaluation
         - Handles exceptions using custom exception class
         """
         try:
@@ -128,6 +171,17 @@ class TrainPipeline:
             )
             # Start the model training process
             model_trainer_artifact = self.start_model_training(data_transformation_artifact=data_transformation_artifact)
+            # Start the model evaluation process
+            model_evaluation_artifact = self.start_model_evaluation(data_transformation_artifact=data_transformation_artifact,
+                                                                    model_trainer_artifact=model_trainer_artifact)
+            
+            # Check if the model is accepted before pushing
+            if not model_evaluation_artifact.is_model_accepted:
+                logging.info("Model not accepted")
+                return None
+            
+            # Start the model pusher process
+            model_pusher_artifact = self.start_model_pusher(model_evaluation_artifact=model_evaluation_artifact)
         except Exception as e:
             # Raise a custom exception if any error occurs during pipeline run
             raise MyException(e, sys)

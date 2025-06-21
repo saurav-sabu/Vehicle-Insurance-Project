@@ -85,3 +85,19 @@ class ModelTrainerConfig:
     _criterion = MIN_SAMPLES_SPLIT_CRITERION
     # Random state for reproducibility
     _random_state = MIN_SAMPLES_SPLIT_RANDOM_STATE
+
+@dataclass
+class ModelEvaluationConfig:
+    # Threshold score to determine if model performance has changed
+    changed_threshold_score: float = MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE
+    # Name of the S3 bucket for model storage
+    bucket_name: str = MODEL_BUCKET_NAME
+    # S3 key path for the model file
+    s3_model_key_path: str = MODEL_FILE_NAME
+
+@dataclass
+class ModelPusherConfig:
+    # Name of the S3 bucket for model pushing
+    bucket_name:str = MODEL_BUCKET_NAME
+    # S3 key path for the model file to be pushed
+    s3_model_key_path: str = MODEL_FILE_NAME
