@@ -44,9 +44,8 @@ class DataForm:
         self.Annual_Premium: Optional[float] = None
         self.Policy_Sales_Channel: Optional[float] = None
         self.Vintage: Optional[int] = None
-        self.Vehicle_Age_lt_1_Year: Optional[int] = None
-        self.Vehicle_Age_lt_2_Year: Optional[int] = None
-        self.Vehicle_Damage_Yes: Optional[int] = None
+        self.Vehicle_Age: Optional[int] = None
+        self.Vehicle_Damage: Optional[int] = None
 
     async def get_vehicle_data(self):
         """
@@ -61,9 +60,8 @@ class DataForm:
         self.Annual_Premium = form.get("Annual_Premium")
         self.Policy_Sales_Channel = form.get("Policy_Sales_Channel")
         self.Vintage = form.get("Vintage")
-        self.Vehicle_Age_lt_1_Year = form.get("Vehicle_Age_lt_1_Year")
-        self.Vehicle_Age_lt_2_Year = form.get("Vehicle_Age_lt_2_Year")
-        self.Vehicle_Damage_Yes = form.get("Vehicle_Damage_Yes")
+        self.Vehicle_Age = form.get("Vehicle_Age")
+        self.Vehicle_Damage = form.get("Vehicle_Damage")
 
 @app.get("/", tags=["authentication"])
 async def index(request: Request):
@@ -111,9 +109,8 @@ async def predictRouteClient(request: Request):
             Annual_Premium=form.Annual_Premium,
             Policy_Sales_Channel=form.Policy_Sales_Channel,
             Vintage=form.Vintage,
-            Vehicle_Age_lt_1_Year=form.Vehicle_Age_lt_1_Year,
-            Vehicle_Age_lt_2_Year=form.Vehicle_Age_lt_2_Year,
-            Vehicle_Damage_Yes=form.Vehicle_Damage_Yes
+            Vehicle_Age=form.Vehicle_Age,
+            Vehicle_Damage=form.Vehicle_Damage
         )
 
         # Convert input data to DataFrame

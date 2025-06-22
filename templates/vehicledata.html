@@ -72,27 +72,19 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="Vehicle_Age_lt_1_Year">
-                            Vehicle Age < 1 Year 
-                            <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
+                        <label for="Vehicle_Age">
+                            Vehicle Age
+                            <span class="info-tooltip" data-tooltip="0 for <1 Year, 1 for 1-2 Year and 2 for >2 Years">ⓘ</span>
                         </label>
-                        <input type="number" id="Vehicle_Age_lt_1_Year" name="Vehicle_Age_lt_1_Year" min="0" max="1" required>
+                        <input type="number" id="Vehicle_Age" name="Vehicle_Age" min="0" max="2" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="Vehicle_Age_gt_2_Years">
-                            Vehicle Age > 2 Years 
-                            <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
-                        </label>
-                        <input type="number" id="Vehicle_Age_gt_2_Years" name="Vehicle_Age_gt_2_Years" min="0" max="1" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="Vehicle_Damage_Yes">
+                        <label for="Vehicle_Damage">
                             Vehicle Damage History 
                             <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
                         </label>
-                        <input type="number" id="Vehicle_Damage_Yes" name="Vehicle_Damage_Yes" min="0" max="1" required>
+                        <input type="number" id="Vehicle_Damage" name="Vehicle_Damage" min="0" max="1" required>
                     </div>
                 </div>
 
@@ -106,12 +98,17 @@
                 </div>
             </form>
 
-            <!-- This would be populated by your Flask template -->
-            <!-- {% if context %}
-            <div class="result">
-                <h2>🎉 Prediction Result: {{ context }}</h2>
+            {% if context and context != "Rendering" %}
+            <div class="result {{ 'yes' if context == 'Yes' else 'no' }}">
+                <h2>🎉 Prediction Result</h2>
+                <p><strong>Insurance Recommendation: {{ context }}</strong></p>
+                {% if context == "Yes" %}
+                <p>✅ This customer is likely to be interested in vehicle insurance!</p>
+                {% else %}
+                <p>❌ This customer is unlikely to be interested in vehicle insurance.</p>
+                {% endif %}
             </div>
-            {% endif %} -->
+            {% endif %}
         </div>
     </div>
 

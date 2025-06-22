@@ -16,9 +16,8 @@ class VehicleData:
                  Annual_Premium,
                  Policy_Sales_Channel,
                  Vintage,
-                 Vehicle_Age_lt_1_Year,
-                 Vehicle_Age_lt_2_Year,
-                 Vehicle_Damage_Yes):
+                 Vehicle_Age,
+                 Vehicle_Damage):
         """
         Initialize VehicleData object with all required features.
         """
@@ -32,9 +31,8 @@ class VehicleData:
             self.Annual_Premium = Annual_Premium
             self.Policy_Sales_Channel = Policy_Sales_Channel
             self.Vintage = Vintage
-            self.Vehicle_Age_lt_1_Year = Vehicle_Age_lt_1_Year
-            self.Vehicle_Age_lt_2_Year = Vehicle_Age_lt_2_Year
-            self.Vehicle_Damage_Yes = Vehicle_Damage_Yes
+            self.Vehicle_Age = Vehicle_Age
+            self.Vehicle_Damage = Vehicle_Damage
 
         except Exception as e:
             logging.error(f"Error initializing VehicleData: {e}")
@@ -72,9 +70,8 @@ class VehicleData:
                 "Annual_Premium":[self.Annual_Premium],
                 "Policy_Sales_Channel":[self.Policy_Sales_Channel],
                 "Vintage":[self.Vintage],
-                "Vehicle_Age_lt_1_Year":[self.Vehicle_Age_lt_1_Year],
-                "Vehicle_Age_lt_2_Year":[self.Vehicle_Age_lt_2_Year],
-                "Vehicle_Damage_Yes":[self.Vehicle_Damage_Yes]
+                "Vehicle_Age":[self.Vehicle_Age],
+                "Vehicle_Damage":[self.Vehicle_Damage]
             }
             logging.info(f"Vehicle data dictionary created: {input_data}")
             return input_data

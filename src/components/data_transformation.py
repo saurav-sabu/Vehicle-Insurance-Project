@@ -84,22 +84,41 @@ class DataTransformation:
         logging.info("Mapping 'Gender' to binary values")
         df["Gender"] = df["Gender"].map({"Female":0,"Male":1}).astype(int)
         return df
-
-    def create_dummy_columns(self,df):
-        """
-        Create dummy/one-hot encoded columns for categorical features.
-        """
-        logging.info("Creating dummy variable for categorical features")
-        df = pd.get_dummies(df,drop_first=True)
-        return df
     
-    def rename_columns(self,df):
+    def map_vehicle_damage(self, df):
         """
-        Rename specific columns for consistency and convert to int if needed.
+        Map 'Vehicle_Damage' column to binary values: No=0, Yes=1.
         """
-        logging.info("Renaming specific columns and converting to int")
-        df = df.rename(columns={"Vehicle_Age_< 1 Year":"Vehicle_Age_lt_1_Year","Vehicle_Age_> 2 Years":"Vehicle_Age_gt_2_Years"})
+        logging.info("Mapping 'Vehicle_Damage' column to binary values: No=0, Yes=1")
+        df["Vehicle_Damage"] = df["Vehicle_Damage"].map({"No": 0, "Yes": 1}).astype(int)
+        logging.info("'Vehicle_Damage' column mapped successfully")
         return df
+
+    def map_vehicle_age(self, df):
+        """
+        Map 'Vehicle_Age' column to integer codes:
+        - "< 1 Year" -> 0
+        - "1-2 Year" -> 1
+        - "> 2 Years" -> 2
+        Handles both string and numeric input types.
+        """
+        logging.info("Mapping 'Vehicle_Age' column to integer codes")
+        if 'Vehicle_Age' in df.columns:
+            if df['Vehicle_Age'].dtype == 'object':
+                vehicle_age_mapping = {
+                    "< 1 Year": 0,
+                    "1-2 Year": 1,
+                    "> 2 Years": 2
+                }
+                df["Vehicle_Age"] = df["Vehicle_Age"].map(vehicle_age_mapping).astype(int)
+                logging.info("'Vehicle_Age' mapped from string to integer codes")
+            else:
+                df["Vehicle_Age"] = df["Vehicle_Age"].astype(int)
+                logging.info("'Vehicle_Age' column already numeric, converted to int type")
+        else:
+            logging.info("'Vehicle_Age' column not found, skipping mapping")
+        return df
+
     
     def drop_id_columns(self,df):
         """
@@ -143,14 +162,14 @@ class DataTransformation:
             # Apply custom transformations to train data
             input_feature_train_df = self.map_gender_column(input_feature_train_df)
             input_feature_train_df = self.drop_id_columns(input_feature_train_df)
-            input_feature_train_df = self.create_dummy_columns(input_feature_train_df)
-            input_feature_train_df = self.rename_columns(input_feature_train_df)
+            input_feature_train_df = self.map_vehicle_age(input_feature_train_df)
+            input_feature_train_df = self.map_vehicle_damage(input_feature_train_df)
 
             # Apply custom transformations to test data
             input_feature_test_df = self.map_gender_column(input_feature_test_df)
             input_feature_test_df = self.drop_id_columns(input_feature_test_df)
-            input_feature_test_df = self.create_dummy_columns(input_feature_test_df)
-            input_feature_test_df = self.rename_columns(input_feature_test_df)
+            input_feature_test_df = self.map_vehicle_age(input_feature_test_df)
+            input_feature_test_df = self.map_vehicle_damage(input_feature_test_df)
             logging.info("Custom transformation applied")
 
             # Get preprocessing pipeline
