@@ -101,3 +101,10 @@ class ModelPusherConfig:
     bucket_name:str = MODEL_BUCKET_NAME
     # S3 key path for the model file to be pushed
     s3_model_key_path: str = MODEL_FILE_NAME
+
+@dataclass
+class VehiclePredictorConfig:
+    # Path to the model file for prediction
+    model_file_path: str = MODEL_FILE_NAME
+    # Name of the S3 bucket containing the model
+    model_bucket_name : str = MODEL_BUCKET_NAME

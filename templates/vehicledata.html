@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Insurance Prediction</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Vehicle Insurance Prediction</h1>
+            <p>Intelligent AI-powered insurance recommendations</p>
+        </div>
+
+        <div class="form-card">
+            <form method="post" action="/" id="predictionForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="Gender">
+                            Gender 
+                            <span class="info-tooltip" data-tooltip="1 for Male, 0 for Female">ⓘ</span>
+                        </label>
+                        <input type="number" id="Gender" name="Gender" min="0" max="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Age">Age</label>
+                        <input type="number" id="Age" name="Age" min="18" max="100" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Driving_License">
+                            Driving License 
+                            <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
+                        </label>
+                        <input type="number" id="Driving_License" name="Driving_License" min="0" max="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Region_Code">Region Code</label>
+                        <input type="number" step="0.01" id="Region_Code" name="Region_Code" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Previously_Insured">
+                            Previously Insured 
+                            <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
+                        </label>
+                        <input type="number" id="Previously_Insured" name="Previously_Insured" min="0" max="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Annual_Premium">Annual Premium ($)</label>
+                        <input type="number" step="0.01" id="Annual_Premium" name="Annual_Premium" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Policy_Sales_Channel">Policy Sales Channel</label>
+                        <input type="number" step="0.01" id="Policy_Sales_Channel" name="Policy_Sales_Channel" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Vintage">Vintage (Days)</label>
+                        <input type="number" id="Vintage" name="Vintage" min="0" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Vehicle_Age_lt_1_Year">
+                            Vehicle Age < 1 Year 
+                            <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
+                        </label>
+                        <input type="number" id="Vehicle_Age_lt_1_Year" name="Vehicle_Age_lt_1_Year" min="0" max="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Vehicle_Age_gt_2_Years">
+                            Vehicle Age > 2 Years 
+                            <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
+                        </label>
+                        <input type="number" id="Vehicle_Age_gt_2_Years" name="Vehicle_Age_gt_2_Years" min="0" max="1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Vehicle_Damage_Yes">
+                            Vehicle Damage History 
+                            <span class="info-tooltip" data-tooltip="0 for No, 1 for Yes">ⓘ</span>
+                        </label>
+                        <input type="number" id="Vehicle_Damage_Yes" name="Vehicle_Damage_Yes" min="0" max="1" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn btn-primary" id="predictBtn">
+                        🎯 Predict Insurance
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="location.href='/train'">
+                        🤖 Train Model
+                    </button>
+                </div>
+            </form>
+
+            <!-- This would be populated by your Flask template -->
+            <!-- {% if context %}
+            <div class="result">
+                <h2>🎉 Prediction Result: {{ context }}</h2>
+            </div>
+            {% endif %} -->
+        </div>
+    </div>
+
+    <script>
+        // Add loading state to predict button
+        document.getElementById('predictionForm').addEventListener('submit', function() {
+            const btn = document.getElementById('predictBtn');
+            btn.classList.add('loading');
+            btn.innerHTML = 'Processing...';
+            btn.disabled = true;
+        });
+
+        // Add some interactivity
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+
+        // Add validation feedback
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const isValid = this.checkValidity();
+                this.style.borderColor = isValid ? '#10b981' : '#ef4444';
+            });
+        });
+    </script>
+</body>
+</html>

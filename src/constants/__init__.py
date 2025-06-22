@@ -70,3 +70,7 @@ MODEL_EVALUATION_CHANGED_THRESHOLD_SCORE : float = 0.02  # Threshold for model e
 MODEL_BUCKET_NAME = "vehicle-model-bucket-1"  # S3 bucket name for model storage
 MODEL_PUSHER_S3_KEY = "model-registry"  # S3 key for model registry
 MODEL_FILE_NAME = "model.pkl"  # Model file name for S3 upload
+
+# Application host and port configuration
+APP_HOST = "0.0.0.0"  # Host for running the application
+APP_PORT = 5000       # Port for running the application

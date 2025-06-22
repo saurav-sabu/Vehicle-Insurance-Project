@@ -108,7 +108,6 @@ class SimpleStorageService:
                 return model
             else:
                 logging.error(f"File object for '{model_file}' not found or invalid.")
-                raise MyException(f"File object for '{model_file}' not found or invalid.", sys)
         except Exception as e:
             logging.error(f"Error loading model '{model_name}': {e}")
             raise MyException(e, sys)
