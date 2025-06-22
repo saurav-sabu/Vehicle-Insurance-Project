@@ -57,6 +57,9 @@ Insurance companies need to identify potential customers who are likely to purch
 - **IAM**: Security and access management
 
 ---
+## **UI**
+![image](https://github.com/user-attachments/assets/356b5e5d-e697-42ab-8494-6f7e9bc51f03)
+---
 
 ## 🏗️ **System Architecture**
 
