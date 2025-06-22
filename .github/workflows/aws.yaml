@@ -26,14 +26,13 @@ jobs:
       - name: Build, tag and push image to Amazon ECR
         id: build-image
         env:
-          ECR_REGISTRY:  ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY:  ${{ secrets.ECR_REPO }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: ${{ secrets.ECR_REPO }}
           IMAGE_TAG: latest
         run: |
-          docker build --no-cache -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker build --no-cache --pull -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-
 
   Continuous-Deployment:
     needs: Continuous-Integration
@@ -54,13 +53,39 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Run Dcoker Image to serve users
-        id: build-image
-        env:
-          ECR_REGISTRY:
-          ECR_REPOSITORY:
-          IMAGE_TAG: latest
+      - name: Stop and remove existing containers
         run: |
-          docker run -d -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" -e AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" -e MONGODB_URL="${{ secrets.MONGODB_URL }}" -p 0.0.0.0:5000:5000 "${{ steps.login-ecr.outputs.registry }}"/"${{ secrets.ECR_REPO }}":latest
-         
+          # Stop all containers using the old image
+          docker stop $(docker ps -q --filter ancestor="${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest") 2>/dev/null || true
+          docker rm $(docker ps -aq --filter ancestor="${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest") 2>/dev/null || true
+          
+          # Also stop any containers with the app name
+          docker stop vehicle-app 2>/dev/null || true
+          docker rm vehicle-app 2>/dev/null || true
 
+      - name: Pull latest image and run container
+        run: |
+          # Remove old image to force pull new one
+          docker rmi "${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest" 2>/dev/null || true
+          
+          # Pull fresh image
+          docker pull "${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest"
+          
+          # Run new container
+          docker run -d \
+            --name vehicle-app \
+            --restart unless-stopped \
+            -p 0.0.0.0:5000:5000 \
+            -e AWS_ACCESS_KEY_ID="${{ secrets.AWS_ACCESS_KEY_ID }}" \
+            -e AWS_SECRET_ACCESS_KEY="${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+            -e AWS_DEFAULT_REGION="${{ secrets.AWS_DEFAULT_REGION }}" \
+            -e MONGODB_URL="${{ secrets.MONGODB_URL }}" \
+            "${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPO }}:latest"
+
+      - name: Verify deployment
+        run: |
+          sleep 10
+          echo "Container status:"
+          docker ps -a | grep vehicle-app
+          echo "Container logs:"
+          docker logs vehicle-app --tail 20
